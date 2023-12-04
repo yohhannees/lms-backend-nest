@@ -38,7 +38,7 @@ export class ThumbnailController {
   ): Promise<Thumbnail> {
     const newThumbnail: Thumbnail = {
       thumbnail_id: undefined,
-      photo: `/uploads/course/thumbnail${videoFile.filename}`,
+      photo: `/uploads/course/thumbnail/${videoFile.filename}`,
       course_id: courseId, 
     };
     return this.thumbnailService.create(newThumbnail);

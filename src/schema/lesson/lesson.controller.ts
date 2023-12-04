@@ -39,7 +39,7 @@ export class LessonController {
   ): Promise<Lesson> {
     const newLesson: Lesson = {
       lesson_id: undefined,
-      video: `/uploads/course/lesson${videoFile.filename}`,
+      video: `/uploads/course/lesson/${videoFile.filename}`,
       unit_id: unit_id, 
       title: lesson.title,
      order: lesson.order,

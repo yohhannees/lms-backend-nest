@@ -7,15 +7,20 @@ export class Quiz {
   quiz_id: number;
 
   @Column()
+  unit_id: number;
+
+  @Column()
   title: string;
 
   @Column()
-   type: string;
+  type: string;
+
+  @Column()
+  description: string;
+  @Column()
+  order: number;
 
   @Column()
   question: string;
-
-  @Column()
-  answer: string;
 
 }

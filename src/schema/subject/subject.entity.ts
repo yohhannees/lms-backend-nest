@@ -12,9 +12,9 @@ export class Subject {
   @Column()
   about: string;
 
-  @Column({nullable : true})
-  trailer: string;
-
+  @Column()
+  photo: string;
+  
   @Column()
   requirement: string;
 
@@ -27,14 +27,11 @@ export class Subject {
   @Column()
   duration: string;
 
-  @Column()
-  no_lesson: number;
+   @Column()
+   year: string;
 
-  @Column()
-  No_quiz: number;
-
-  @Column()
-  category: number;
+    @Column()
+   type: string;
 
   @Column()
   price: string;

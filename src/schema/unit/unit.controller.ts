@@ -43,7 +43,7 @@ export class UnitController {
       course_id: course_id,
       unit_id: undefined,
       title: unit.title,
-      file: `/uploads/course/lesson${File.filename}`,
+      file: `/uploads/course/unit_file/${File.filename}`,
       description:unit.description,
 
     };

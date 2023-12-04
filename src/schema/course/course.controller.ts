@@ -36,7 +36,7 @@ export class CourseController {
       course_id: undefined,
       title: course.title,
       about: course.about,
-      trailer: `/uploads/course/trailer${videoFile.filename}`, 
+      trailer: `/uploads/course/trailer/${videoFile.filename}`, 
       requirement: course.requirement,
       level: course.level,
       language: course.language,

@@ -7,6 +7,10 @@ import { CourseModule } from './schema/course/course.module';
 import { ThumbnailModule } from './schema/course/thumbnail/thumbnail.module';
 import { LessonModule } from './schema/lesson/lesson.module';
 import { UnitModule } from './schema/unit/unit.module';
+import { AssessmentModule } from './schema/assessment/assessment.module';
+import { QuestionModule } from './schema/question/question.module';
+import { QuizModule } from './schema/quiz/quiz.module';
+import { SubjectModule } from './schema/subject/subject.module';
 
 @Module({
   imports: [
@@ -25,6 +29,11 @@ import { UnitModule } from './schema/unit/unit.module';
   ThumbnailModule,
   LessonModule,
   UnitModule,
+  AssessmentModule,
+  QuizModule,
+  QuestionModule,
+  SubjectModule,
+  
   ],
   controllers: [AppController],
   providers: [AppService],

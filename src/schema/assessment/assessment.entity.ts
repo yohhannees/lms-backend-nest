@@ -6,7 +6,7 @@ export class Assessment {
   assessment_id: number;
 
   @Column()
-  course_id: string;
+  course_id: number;
 
   @Column()
   file: string;

@@ -33,6 +33,6 @@ export class CourseService {
 
   async delete(course_id: number): Promise<void> {
     await this.courseRepository.delete(course_id);
-  }
   
+  }
 }

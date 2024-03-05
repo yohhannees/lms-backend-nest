@@ -15,6 +15,7 @@ import { BannerModule } from './schema/others/banner/banner.module';
 import { FaqModule } from './schema/others/faq/faq.module';
 import { PromotionModule } from './schema/others/promotion/promotion.module';
 import { ExpectationModule } from './schema/others/expectations/expectation.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { ExpectationModule } from './schema/others/expectations/expectation.modu
   FaqModule,
   PromotionModule,
   ExpectationModule,
+  AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

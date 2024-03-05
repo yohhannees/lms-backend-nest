@@ -11,7 +11,7 @@ export class EmailService {
       service: 'gmail',
       auth: {
         user: 'yohannesgetachew.e@gmail.com', // Replace with your Gmail address
-        pass: 'akiya@dagim@123', // Replace with your Gmail password or app-specific password
+        pass: 'bjlf npye ljfj zehy', // Repl with your Gmail password or app-specific password
       },
     });
   }
@@ -21,8 +21,11 @@ export class EmailService {
       from: 'yohannesgetachew.e@gmail.com', // Sender email address
       to: to, // Recipient email address
       subject: 'Email Verification', // Email subject
-      text: `Your verification code is: ${code}`, // Email body
-    };
+      html: `
+      <h1 style="color: blue;">Email Verification</h1>
+      <p style="color: green;">Your verification code is: <strong>${code}</strong></p>
+    `, // HTML body
+  };
 
     try {
       await this.transporter.sendMail(mailOptions);

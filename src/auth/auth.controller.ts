@@ -7,32 +7,62 @@ export class AuthController {
   constructor(private readonly userService: UserService) {}
 
   @Post('register')
-  async register(@Body() body: { fullname: string, email: string, password: string }) {
+  async register(
+    @Body() body: { fullname: string; email: string; password: string },
+  ) {
     const { fullname, email, password } = body;
     const user = await this.userService.createUser(fullname, email, password);
-    await this.userService.sendVerificationEmail(user.email, user.verificationCode);
-    return { message: 'User registered. Please check your email for verification.' };
+    await this.userService.sendVerificationEmail(
+      user.email,
+      user.verificationCode,
+    );
+    const response = {
+      success: true,
+      message: 'User registered. Please check your email for verification.',
+      data: null,
+    };
+    return response;
   }
 
   @Post('verify')
-  async verifyEmail(@Body() body: { email: string, code: string }) {
+  async verifyEmail(@Body() body: { email: string; code: string }) {
     const { email, code } = body;
     const verified = await this.userService.verifyEmail(email, code);
     if (verified) {
-      return { message: 'Email verified successfully.' };
+      const response = {
+        success: true,
+        message: 'Email verified successfully.',
+        data: null,
+      };
+      return response;
     } else {
-      return { message: 'Invalid verification code.' };
+      const response = {
+        success: true,
+        message: 'Invalid verification code.',
+        data: null,
+      };
+      return response;
     }
   }
 
   @Post('login')
-  async login(@Body() body: { email: string, password: string }) {
+  async login(@Body() body: { email: string; password: string }) {
     const { email, password } = body;
     const user = await this.userService.validateUser(email, password);
     if (user) {
-      return { message: 'Login successful', user };
+      const response = {
+        success: true,
+        message: 'Login successful',
+        data: user,
+      };
+      return response;
     } else {
-      return { message: 'Invalid email or password' };
+      const response = {
+        success: false,
+        message: 'Invalid email or password',
+        data: null,
+      };
+      return response;
     }
   }
 }

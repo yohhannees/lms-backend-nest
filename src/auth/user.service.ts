@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
@@ -48,5 +48,28 @@ export class UserService {
 
   async sendVerificationEmail(to: string, code: string) {
     await this.emailService.sendVerificationEmail(to, code);
+  }
+
+
+
+   async initiatePasswordReset(email: string): Promise<void> {
+    const user = await this.findByEmail(email);
+    if (user) {
+      const code = randomBytes(3).toString('hex');
+      user.verificationCode = code;
+      await this.usersRepository.save(user);
+      await this.emailService.sendPasswordResetEmail(email, code);
+    }
+  }
+
+  async resetPassword(email: string, code: string, newPassword: string): Promise<boolean> {
+    const user = await this.findByEmail(email);
+    if (user && user.verificationCode === code) {
+      user.password = newPassword;
+      user.verificationCode = null;
+      await this.usersRepository.save(user);
+      return true;
+    }
+    throw new BadRequestException('Invalid verification code.');
   }
 }

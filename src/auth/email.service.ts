@@ -34,5 +34,25 @@ export class EmailService {
       console.error('Error sending verification email:', error);
     }
   }
+
+
+   async sendPasswordResetEmail(to: string, code: string) {
+    const mailOptions = {
+      from: 'yohannesgetachew.e@gmail.com',
+      to: to,
+      subject: 'Password Reset',
+      html: `
+        <h1 style="color: blue;">Password Reset</h1>
+        <p style="color: green;">Your password reset code is: <strong>${code}</strong></p>
+      `,
+    };
+
+    try {
+      await this.transporter.sendMail(mailOptions);
+      console.log('Password reset email sent');
+    } catch (error) {
+      console.error('Error sending password reset email:', error);
+    }
+  }
 }
 

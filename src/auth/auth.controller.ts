@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body} from '@nestjs/common';
 import { UserService } from './user.service';
 
 @Controller('auth')
@@ -65,4 +65,34 @@ export class AuthController {
       return response;
     }
   }
+
+@Post('forgot-password')
+async forgotPassword(@Body() body: { email: string }) {
+  const { email } = body;
+  await this.userService.initiatePasswordReset(email);
+  return {
+    success: true,
+    message: 'Password reset initiated. Please check your email for instructions.',
+    data: null,
+  };
+}
+
+@Post('reset-password')
+async resetPassword(@Body() body: { email: string, code: string, newPassword: string }) {
+  const { email, code, newPassword } = body;
+  const success = await this.userService.resetPassword(email, code, newPassword);
+  if (success) {
+    return {
+      success: true,
+      message: 'Password reset successful. You can now login with your new password.',
+      data: null,
+    };
+  } else {
+    return {
+      success: false,
+      message: 'Invalid verification code.',
+      data: null,
+    };
+  }
+}
 }

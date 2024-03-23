@@ -20,14 +20,26 @@ import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-  "type": "postgres",  "host": "dpg-cnsbg30l6cac7385459g-a",
+
+      
+  // "type": "postgres",  "host": "dpg-cnsbg30l6cac7385459g-a",
+  // "port": 5432,
+  // "username": "yayaacademy_user",
+  // "password": "gSJgW3ZOZur8ezGZrXetF7OXzVGTYTsb",
+  // "database": "yayaacademy",
+  // "synchronize": true,
+  // "logging": true,
+  // "entities": [__dirname + '/**/*.entity.{ts,js}'],
+
+  "type": "postgres",  "host": "localhost",
   "port": 5432,
-  "username": "yayaacademy_user",
-  "password": "gSJgW3ZOZur8ezGZrXetF7OXzVGTYTsb",
-  "database": "yayaacademy",
+  "username": "postgres",
+  "password": "etata30",
+  "database": "work",
   "synchronize": true,
   "logging": true,
   "entities": [__dirname + '/**/*.entity.{ts,js}'],
+  
     }),
   CourseModule,
   ThumbnailModule,

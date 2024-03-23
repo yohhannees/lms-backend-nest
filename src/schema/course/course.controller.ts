@@ -6,14 +6,35 @@ import {  FileInterceptor} from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import * as path from 'path';
 import { MulterFile } from 'multer';
+import { ThumbnailService } from './thumbnail/thumbnail.service';
 
 @Controller('course')
 export class CourseController {
-  constructor(private readonly courseService: CourseService) {}
+   constructor(
+    private readonly courseService: CourseService,
+    private readonly thumbnailService: ThumbnailService
+  ) {}
 
-  @Get()
-  async findAll(): Promise<Course[]> {
-    return this.courseService.findAll();
+  // @Get()
+  // async findAll(): Promise<Course[]> {
+  //   return this.courseService.findAll();
+  // }
+
+   @Get()
+  async findAll(): Promise<any[]> {
+    const courses: Course[] = await this.courseService.findAll();
+
+    const coursesWithThumbnail: any[] = await Promise.all(
+      courses.map(async (course: Course) => {
+        const thumbnail = await this.thumbnailService.findById(course.course_id);
+        return {
+          ...course,
+          thumbnail: thumbnail ? thumbnail.photo : null
+        };
+      })
+    );
+
+    return coursesWithThumbnail;
   }
 
   @Get(':course_id')
@@ -53,5 +74,5 @@ export class CourseController {
   @Delete(':course_id')
   async delete(@Param('course_id') course_id: string): Promise<void> {
     return this.courseService.delete(Number(course_id));
-  }
+  }zz
 }

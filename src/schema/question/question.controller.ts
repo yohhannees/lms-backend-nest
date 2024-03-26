@@ -2,7 +2,9 @@
 import { Controller, Get, Post, Delete, Param, Body } from '@nestjs/common';
 import { Question } from './question.entity';
 import { QuestionService } from './question.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('question')
 @Controller('question')
 export class QuestionController {
   constructor(private readonly questionService: QuestionService) {}
@@ -14,13 +16,13 @@ export class QuestionController {
       return {
         success: true,
         message: 'Questions fetched successfully',
-        data: questions
+        data: questions,
       };
     } catch (error) {
       return {
         success: false,
         message: 'Failed to fetch questions',
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -33,20 +35,20 @@ export class QuestionController {
         return {
           success: true,
           message: 'Question found',
-          data: question
+          data: question,
         };
       } else {
         return {
           success: false,
           message: 'Question not found',
-          data: null
+          data: null,
         };
       }
     } catch (error) {
       return {
         success: false,
         message: 'Failed to find question',
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -66,13 +68,13 @@ export class QuestionController {
       return {
         success: true,
         message: 'Question created successfully',
-        data: createdQuestion
+        data: createdQuestion,
       };
     } catch (error) {
       return {
         success: false,
         message: 'Failed to create question',
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -84,13 +86,13 @@ export class QuestionController {
       return {
         success: true,
         message: 'Question deleted successfully',
-        data: null
+        data: null,
       };
     } catch (error) {
       return {
         success: false,
         message: 'Failed to delete question',
-        error: error.message
+        error: error.message,
       };
     }
   }

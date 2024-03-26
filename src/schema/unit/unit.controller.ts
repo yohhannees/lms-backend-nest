@@ -1,12 +1,23 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Delete, Param, UseInterceptors, UploadedFile, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Delete,
+  Param,
+  UseInterceptors,
+  UploadedFile,
+  Body,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import * as path from 'path';
 import { MulterFile } from 'multer';
 import { UnitService } from './unit.service';
 import { Unit } from './unit.entity';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('unit')
 @Controller('unit')
 export class UnitController {
   constructor(private readonly unitService: UnitService) {}
@@ -18,13 +29,13 @@ export class UnitController {
       return {
         success: true,
         message: 'Units fetched successfully',
-        data: units
+        data: units,
       };
     } catch (error) {
       return {
         success: false,
         message: 'Failed to fetch units',
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -37,35 +48,38 @@ export class UnitController {
         return {
           success: true,
           message: 'Unit found',
-          data: unit
+          data: unit,
         };
       } else {
         return {
           success: false,
           message: 'Unit not found',
-          data: null
+          data: null,
         };
       }
     } catch (error) {
       return {
         success: false,
         message: 'Failed to find unit',
-        error: error.message
+        error: error.message,
       };
     }
   }
 
   @Post(':course_id')
-  @UseInterceptors(FileInterceptor('file', { 
-    storage: diskStorage({
-      destination: './uploads/course/unit_file',
-      filename: (req, file, callback) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        const fileExtension = path.extname(file.originalname);
-        callback(null, file.fieldname + '-' + uniqueSuffix + fileExtension);
-      },
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads/course/unit_file',
+        filename: (req, file, callback) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const fileExtension = path.extname(file.originalname);
+          callback(null, file.fieldname + '-' + uniqueSuffix + fileExtension);
+        },
+      }),
     }),
-  }))
+  )
   async create(
     @UploadedFile() File: MulterFile,
     @Param('course_id') course_id: number,
@@ -83,13 +97,13 @@ export class UnitController {
       return {
         success: true,
         message: 'Unit created successfully',
-        data: createdUnit
+        data: createdUnit,
       };
     } catch (error) {
       return {
         success: false,
         message: 'Failed to create unit',
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -101,13 +115,13 @@ export class UnitController {
       return {
         success: true,
         message: 'Unit deleted successfully',
-        data: null
+        data: null,
       };
     } catch (error) {
       return {
         success: false,
         message: 'Failed to delete unit',
-        error: error.message
+        error: error.message,
       };
     }
   }

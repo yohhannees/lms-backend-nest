@@ -1,12 +1,23 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Body, Delete, Param, UseInterceptors, UploadedFile } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Delete,
+  Param,
+  UseInterceptors,
+  UploadedFile,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import * as path from 'path';
 import { MulterFile } from 'multer';
 import { SubjectService } from './subject.service';
 import { Subject } from './subject.entity';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('subject')
 @Controller('subject')
 export class SubjectController {
   constructor(private readonly subjectService: SubjectService) {}
@@ -56,15 +67,23 @@ export class SubjectController {
   }
 
   @Post()
-  @UseInterceptors(FileInterceptor('photo', { storage: diskStorage({
-    destination: './uploads/subject/photo',
-    filename: (req, file, callback) => {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-      const fileExtension = path.extname(file.originalname);
-      callback(null, file.fieldname + '-' + uniqueSuffix + fileExtension);
-    },
-  })}))
-  async create(@UploadedFile() photoFile: MulterFile, @Body() subject: Subject): Promise<any> {
+  @UseInterceptors(
+    FileInterceptor('photo', {
+      storage: diskStorage({
+        destination: './uploads/subject/photo',
+        filename: (req, file, callback) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const fileExtension = path.extname(file.originalname);
+          callback(null, file.fieldname + '-' + uniqueSuffix + fileExtension);
+        },
+      }),
+    }),
+  )
+  async create(
+    @UploadedFile() photoFile: MulterFile,
+    @Body() subject: Subject,
+  ): Promise<any> {
     try {
       const newSubject: Subject = {
         subject_id: undefined,

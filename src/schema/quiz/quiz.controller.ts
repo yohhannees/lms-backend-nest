@@ -2,7 +2,9 @@
 import { Controller, Get, Post, Delete, Param, Body } from '@nestjs/common';
 import { Quiz } from './quiz.entity';
 import { QuizService } from './quiz.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('quiz')
 @Controller('quiz')
 export class QuizController {
   constructor(private readonly quizService: QuizService) {}

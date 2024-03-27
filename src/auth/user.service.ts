@@ -14,7 +14,11 @@ export class UserService {
     private emailService: EmailService,
   ) {}
 
-  async createUser(fullname: string, email: string, password: string): Promise<User> {
+  async createUser(
+    fullname: string,
+    email: string,
+    password: string,
+  ): Promise<User> {
     const user = new User();
     user.fullname = fullname;
     user.email = email;
@@ -39,7 +43,9 @@ export class UserService {
   }
 
   async validateUser(email: string, password: string): Promise<User> {
-    const user = await this.usersRepository.findOne({ where: { email, password } });
+    const user = await this.usersRepository.findOne({
+      where: { email, password },
+    });
     if (user && user.isVerified) {
       return user;
     }
@@ -50,19 +56,28 @@ export class UserService {
     await this.emailService.sendVerificationEmail(to, code);
   }
 
-
-
-   async initiatePasswordReset(email: string): Promise<void> {
+  async initiatePasswordReset(email: string): Promise<void> {
     const user = await this.findByEmail(email);
     if (user) {
       const code = randomBytes(3).toString('hex');
       user.verificationCode = code;
       await this.usersRepository.save(user);
       await this.emailService.sendPasswordResetEmail(email, code);
+    } else {
+      const response = {
+        success: false,
+        message: 'User not found.',
+        data: null,
+      };
+      throw new BadRequestException(response);
     }
   }
 
-  async resetPassword(email: string, code: string, newPassword: string): Promise<boolean> {
+  async resetPassword(
+    email: string,
+    code: string,
+    newPassword: string,
+  ): Promise<boolean> {
     const user = await this.findByEmail(email);
     if (user && user.verificationCode === code) {
       user.password = newPassword;

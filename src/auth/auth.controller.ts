@@ -1,9 +1,14 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpCode,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { UserService } from './user.service';
-import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly userService: UserService) {}
@@ -39,11 +44,11 @@ export class AuthController {
       return response;
     } else {
       const response = {
-        success: true,
+        success: false,
         message: 'Invalid verification code.',
         data: null,
       };
-      return response;
+      throw new HttpException(response, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -64,7 +69,7 @@ export class AuthController {
         message: 'Invalid email or password',
         data: null,
       };
-      return response;
+      throw new HttpException(response, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -98,11 +103,12 @@ export class AuthController {
         data: null,
       };
     } else {
-      return {
+      const response = {
         success: false,
         message: 'Invalid verification code.',
         data: null,
       };
+      throw new HttpException(response, HttpStatus.BAD_REQUEST);
     }
   }
 }

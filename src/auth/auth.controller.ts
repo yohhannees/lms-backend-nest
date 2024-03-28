@@ -19,6 +19,7 @@ export class AuthController {
   ) {
     const { fullname, email, password } = body;
     const user = await this.userService.createUser(fullname, email, password);
+    console.log('created', user);
     await this.userService.sendVerificationEmail(
       user.email,
       user.verificationCode,
@@ -83,6 +84,27 @@ export class AuthController {
         'Password reset initiated. Please check your email for instructions.',
       data: null,
     };
+  }
+  // to verify the otp before sending the new password
+  @Post('verify-otp')
+  async verifyOtp(@Body() body: { email: string; code: string }) {
+    const { email, code } = body;
+    const verified = await this.userService.verifyEmail(email, code);
+    if (verified) {
+      const response = {
+        success: true,
+        message: 'Email verified successfully.',
+        data: null,
+      };
+      return response;
+    } else {
+      const response = {
+        success: false,
+        message: 'Invalid verification code.',
+        data: null,
+      };
+      throw new HttpException(response, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Post('reset-password')

@@ -19,11 +19,22 @@ export class UserService {
     email: string,
     password: string,
   ): Promise<User> {
+    const ExisitingUser = await this.usersRepository.findOne({
+      where: { email },
+    });
+    if (ExisitingUser) {
+      const response = {
+        success: false,
+        message: 'User already exists.',
+        data: null,
+      };
+      throw new BadRequestException(response);
+    }
     const user = new User();
     user.fullname = fullname;
     user.email = email;
     user.password = password;
-    user.verificationCode = randomBytes(3).toString('hex'); // Example verification code
+    user.verificationCode = Math.floor(1000 + Math.random() * 9000).toString();
     user.isVerified = false;
     return await this.usersRepository.save(user);
   }
@@ -59,7 +70,7 @@ export class UserService {
   async initiatePasswordReset(email: string): Promise<void> {
     const user = await this.findByEmail(email);
     if (user) {
-      const code = randomBytes(3).toString('hex');
+      const code = Math.floor(1000 + Math.random() * 9000).toString();
       user.verificationCode = code;
       await this.usersRepository.save(user);
       await this.emailService.sendPasswordResetEmail(email, code);

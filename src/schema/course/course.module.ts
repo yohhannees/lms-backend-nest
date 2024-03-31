@@ -10,13 +10,18 @@ import { ThumbnailModule } from './thumbnail/thumbnail.module';
 import { ThumbnailController } from './thumbnail/thumbnail.controller';
 import { ThumbnailService } from './thumbnail/thumbnail.service';
 import { Thumbnail } from './thumbnail/thumbnail.entity'; 
+import { AuthModule } from 'src/auth/auth.module';
+import { User } from 'src/auth/user.entity';
+import { UserService } from 'src/auth/user.service';
+import { AuthController } from 'src/auth/auth.controller';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Course, Thumbnail]),
+    TypeOrmModule.forFeature([Course, Thumbnail,User]),
     ThumbnailModule,
+    AuthModule,
   ],
-  controllers: [CourseController, ThumbnailController],
-  providers: [CourseService, ThumbnailService], 
+  controllers: [CourseController, ThumbnailController,AuthController],
+  providers: [CourseService, ThumbnailService,UserService], 
 })
 export class CourseModule {}

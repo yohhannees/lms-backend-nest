@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Body, Delete, Param, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Body, Delete, Param, UseInterceptors, UploadedFile,Req, UseGuards } from '@nestjs/common';
 import { Course } from './course.entity';
 import { CourseService } from './course.service';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -7,12 +7,15 @@ import { diskStorage } from 'multer';
 import * as path from 'path';
 import { MulterFile } from 'multer';
 import { ThumbnailService } from './thumbnail/thumbnail.service';
+import { AuthGuard } from '@nestjs/passport';
+import { UserService } from 'src/auth/user.service';
 
 @Controller('course')
 export class CourseController {
    constructor(
     private readonly courseService: CourseService,
-    private readonly thumbnailService: ThumbnailService
+    private readonly thumbnailService: ThumbnailService,
+    private readonly userService: UserService
   ) {}
 
   @Get()
@@ -44,30 +47,30 @@ export class CourseController {
     }
   }
 
-  @Get(':course_id')
-  async findById(@Param('course_id') course_id: number): Promise<any> {
-    try {
-      const course: Course = await this.courseService.findById(course_id);
-      if (!course) {
-        return {
-          success: false,
-          message: 'Course not found.',
-          data: null
-        };
-      }
-      return {
-        success: true,
-        message: 'Course found successfully.',
-        data: course
-      };
-    } catch (error) {
-      return {
-        success: false,
-        message: 'Failed to retrieve course.',
-        data: null
-      };
-    }
-  }
+  // @Get(':course_id')
+  // async findById(@Param('course_id') course_id: number): Promise<any> {
+  //   try {
+  //     const course: Course = await this.courseService.findById(course_id);
+  //     if (!course) {
+  //       return {
+  //         success: false,
+  //         message: 'Course not found.',
+  //         data: null
+  //       };
+  //     }
+  //     return {
+  //       success: true,
+  //       message: 'Course found successfully.',
+  //       data: course
+  //     };
+  //   } catch (error) {
+  //     return {
+  //       success: false,
+  //       message: 'Failed to retrieve course.',
+  //       data: null
+  //     };
+  //   }
+  // }
 
   @Post()
   @UseInterceptors(FileInterceptor('trailer', { storage: diskStorage({
@@ -122,6 +125,43 @@ export class CourseController {
       return {
         success: false,
         message: 'Failed to delete course.',
+        data: null
+      };
+    }
+  }
+
+
+  @Get(':course_id')
+  @UseGuards(AuthGuard('jwt'))
+  async findById(@Req() req, @Param('course_id') courseId: number): Promise<any> {
+    const userId = req.user.id;
+    try {
+      const hasAccess = await this.userService.hasCourseAccess(userId, courseId);
+      if (hasAccess) {
+        const course = await this.courseService.findById(courseId);
+        if (!course) {
+          return {
+            success: false,
+            message: 'Course not found.',
+            data: null
+          };
+        }
+        return {
+          success: true,
+          message: 'Course found successfully.',
+          data: course
+        };
+      } else {
+        return {
+          success: false,
+          message: 'You do not have access to this course.',
+          data: null
+        };
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Failed to retrieve course.',
         data: null
       };
     }

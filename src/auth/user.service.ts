@@ -3,8 +3,9 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
-import { randomBytes } from 'crypto';
+// import { randomBytes } from 'crypto';
 import { EmailService } from './email.service';
+import { Course } from 'src/schema/course/course.entity';
 
 @Injectable()
 export class UserService {
@@ -12,6 +13,7 @@ export class UserService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     private emailService: EmailService,
+    private coursesRepository: Repository<Course>,
   ) {}
 
   async createUser(
@@ -19,10 +21,10 @@ export class UserService {
     email: string,
     password: string,
   ): Promise<User> {
-    const ExisitingUser = await this.usersRepository.findOne({
+    const ExistingUser = await this.usersRepository.findOne({
       where: { email },
     });
-    if (ExisitingUser) {
+    if (ExistingUser) {
       const response = {
         success: false,
         message: 'User already exists.',
@@ -98,4 +100,30 @@ export class UserService {
     }
     throw new BadRequestException('Invalid verification code.');
   }
+
+
+
+   async purchaseCourse(userId: number, course_id : number): Promise<void> {
+    const user = await this.usersRepository.findOne({ where: { id: userId }, relations: ['courses'] });
+  if (!user) {
+    throw new Error('User not found');
+  }
+    const course = await this.coursesRepository.findOne({ where: { course_id } });
+    if (!course) {
+      throw new Error('Course not found');
+    }
+    user.courses.push(course);
+    await this.usersRepository.save(user);
+  }
+
+
+   async hasCourseAccess(userId: number, course_id: number): Promise<boolean> {
+    const user = await this.usersRepository.findOne({ where: { id: userId }, relations: ['courses'] });
+  if (!user) {
+    throw new Error('User not found');
+  }
+    return user.courses.some(course => course.course_id === course_id);
+  }
 }
+
+

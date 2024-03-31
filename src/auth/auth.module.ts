@@ -8,9 +8,10 @@ import { UserService } from './user.service';
 import { Course } from 'src/schema/course/course.entity';
 import { CourseController } from 'src/schema/course/course.controller';
 import { CourseService } from 'src/schema/course/course.service';
+import { ThumbnailModule } from 'src/schema/course/thumbnail/thumbnail.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Course])],
+  imports: [TypeOrmModule.forFeature([User, Course]), ThumbnailModule],
   controllers: [AuthController, CourseController],
   providers: [UserService, EmailService, CourseService],
 })

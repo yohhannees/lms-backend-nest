@@ -14,6 +14,7 @@ import { AuthModule } from 'src/auth/auth.module';
 import { User } from 'src/auth/user.entity';
 import { UserService } from 'src/auth/user.service';
 import { AuthController } from 'src/auth/auth.controller';
+import { EmailService } from 'src/auth/email.service';
 
 @Module({
   imports: [
@@ -22,6 +23,6 @@ import { AuthController } from 'src/auth/auth.controller';
     AuthModule,
   ],
   controllers: [CourseController, ThumbnailController, AuthController],
-  providers: [CourseService, ThumbnailService],
+  providers: [ThumbnailService, CourseService, UserService, EmailService],
 })
 export class CourseModule {}

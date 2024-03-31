@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm'; 
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CourseModule } from './schema/course/course.module';
@@ -20,40 +20,38 @@ import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'dpg-cnsbg30l6cac7385459g-a',
+      port: 5432,
+      username: 'yayaacademy_user',
+      password: 'gSJgW3ZOZur8ezGZrXetF7OXzVGTYTsb',
+      database: 'yayaacademy',
+      synchronize: true,
+      logging: true,
+      entities: [__dirname + '/**/*.entity.{ts,js}'],
 
-      
-  // "type": "postgres",  "host": "dpg-cnsbg30l6cac7385459g-a",
-  // "port": 5432,
-  // "username": "yayaacademy_user",
-  // "password": "gSJgW3ZOZur8ezGZrXetF7OXzVGTYTsb",
-  // "database": "yayaacademy",
-  // "synchronize": true,
-  // "logging": true,
-  // "entities": [__dirname + '/**/*.entity.{ts,js}'],
-
-  "type": "postgres",  "host": "localhost",
-  "port": 5432,
-  "username": "postgres",
-  "password": "etata30",
-  "database": "work",
-  "synchronize": true,
-  "logging": true,
-  "entities": [__dirname + '/**/*.entity.{ts,js}'],
-  
+      // "type": "postgres",  "host": "localhost",
+      // "port": 5432,
+      // "username": "postgres",
+      // "password": "etata30",
+      // "database": "work",
+      // "synchronize": true,
+      // "logging": true,
+      // "entities": [__dirname + '/**/*.entity.{ts,js}'],
     }),
-  CourseModule,
-  ThumbnailModule,
-  LessonModule,
-  UnitModule,
-  AssessmentModule,
-  QuizModule,
-  QuestionModule,
-  SubjectModule,
-  BannerModule,
-  FaqModule,
-  PromotionModule,
-  ExpectationModule,
-  AuthModule,
+    CourseModule,
+    ThumbnailModule,
+    LessonModule,
+    UnitModule,
+    AssessmentModule,
+    QuizModule,
+    QuestionModule,
+    SubjectModule,
+    BannerModule,
+    FaqModule,
+    PromotionModule,
+    ExpectationModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

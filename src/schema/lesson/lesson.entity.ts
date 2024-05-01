@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
@@ -11,8 +12,14 @@ export class Lesson {
   @Column()
   title: string;
 
-  @Column()
+  @Column({ nullable: true })
   video: string;
+
+  @Column({ nullable: true })
+  type: string;
+
+  @Column({ nullable: true })
+  text: string;
 
   @Column()
   order: number;

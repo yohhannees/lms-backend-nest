@@ -16,28 +16,30 @@ import { FaqModule } from './schema/others/faq/faq.module';
 import { PromotionModule } from './schema/others/promotion/promotion.module';
 import { ExpectationModule } from './schema/others/expectations/expectation.module';
 import { AuthModule } from './auth/auth.module';
+import { CategoriesModule } from './schema/categories/categories.module';
+
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'dpg-cnsbg30l6cac7385459g-a',
-      port: 5432,
-      username: 'yayaacademy_user',
-      password: 'gSJgW3ZOZur8ezGZrXetF7OXzVGTYTsb',
-      database: 'yayaacademy',
-      synchronize: true,
-      logging: true,
-      entities: [__dirname + '/**/*.entity.{ts,js}'],
       // type: 'postgres',
-      // host: 'localhost',
+      // host: 'dpg-cnsbg30l6cac7385459g-a',
       // port: 5432,
-      // username: 'jossy',
-      // password: 'yeyosfresh',
-      // database: 'ya',
+      // username: 'yayaacademy_user',
+      // password: 'gSJgW3ZOZur8ezGZrXetF7OXzVGTYTsb',
+      // database: 'yayaacademy',
       // synchronize: true,
       // logging: true,
       // entities: [__dirname + '/**/*.entity.{ts,js}'],
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'postgres',
+      password: '12345',
+      database: 'lms',
+      synchronize: true,
+      logging: true,
+      entities: [__dirname + '/**/*.entity.{ts,js}'],
     }),
     CourseModule,
     ThumbnailModule,
@@ -52,6 +54,8 @@ import { AuthModule } from './auth/auth.module';
     PromotionModule,
     ExpectationModule,
     AuthModule,
+    CategoriesModule,
+ 
   ],
   controllers: [AppController],
   providers: [AppService],

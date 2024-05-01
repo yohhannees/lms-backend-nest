@@ -6,8 +6,11 @@ export class Quiz {
   @PrimaryGeneratedColumn()
   quiz_id: number;
 
-  @Column()
+  @Column( )
   unit_id: number;
+
+  @Column({ nullable: true })
+  course_id: number;
 
   @Column()
   title: string;

@@ -65,6 +65,7 @@ export class QuizController {
         order: quiz.order,
         type: quiz.type,
         question: quiz.question,
+        course_id: quiz.course_id,
       };
       const createdQuiz = await this.quizService.create(newQuiz);
       return {

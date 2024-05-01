@@ -17,6 +17,8 @@ import { PromotionModule } from './schema/others/promotion/promotion.module';
 import { ExpectationModule } from './schema/others/expectations/expectation.module';
 import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './schema/categories/categories.module';
+import { GetCourseModule } from './schema/getCourse/getCourse.module';
+
 
 
 @Module({
@@ -55,6 +57,7 @@ import { CategoriesModule } from './schema/categories/categories.module';
     ExpectationModule,
     AuthModule,
     CategoriesModule,
+    GetCourseModule,
  
   ],
   controllers: [AppController],

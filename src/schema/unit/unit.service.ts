@@ -33,4 +33,8 @@ export class UnitService {
   async delete(unit_id: number): Promise<void> {
     await this.unitRepository.delete(unit_id);
   }
+
+  async findByCourseId(course_id: number): Promise<Unit[]> {
+    return this.unitRepository.find({ where: { course_id } });
+  }
 }

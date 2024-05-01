@@ -32,4 +32,8 @@ export class LessonService {
   async delete(lesson_id: number): Promise<void> {
     await this.lessonRepository.delete(lesson_id);
   }
+
+  async findByUnitId(unit_id: number): Promise<Lesson[]> {
+    return this.lessonRepository.find({ where: { unit_id } });
+  }
 }

@@ -19,6 +19,7 @@ import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './schema/categories/categories.module';
 import { GetCourseModule } from './schema/getCourse/getCourse.module';
 import { CheckModule } from './schema/check/check.module';
+import { PaymentModule } from './payment/payment.module';
 
 
 
@@ -60,6 +61,7 @@ import { CheckModule } from './schema/check/check.module';
     CategoriesModule,
     GetCourseModule,
     CheckModule,
+    PaymentModule,
  
   ],
   controllers: [AppController],

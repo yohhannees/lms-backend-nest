@@ -33,6 +33,7 @@ export class AuthController {
     const verified = await this.userService.verifyEmail(email, code);
     if (verified) {
       const response = {
+    
         success: true,
         message: 'Email verified successfully.',
         data: null,

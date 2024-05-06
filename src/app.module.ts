@@ -18,6 +18,7 @@ import { ExpectationModule } from './schema/others/expectations/expectation.modu
 import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './schema/categories/categories.module';
 import { GetCourseModule } from './schema/getCourse/getCourse.module';
+import { CheckModule } from './schema/check/check.module';
 
 
 
@@ -58,6 +59,7 @@ import { GetCourseModule } from './schema/getCourse/getCourse.module';
     AuthModule,
     CategoriesModule,
     GetCourseModule,
+    CheckModule,
  
   ],
   controllers: [AppController],

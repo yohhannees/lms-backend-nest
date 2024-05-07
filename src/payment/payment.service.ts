@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
-import axios from 'axios';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaidCourse } from './payment.entity';
@@ -33,30 +32,32 @@ export class PaymentService {
 
   async initializeTransaction(userId: number, courseId: number, txRef: string): Promise<any> {
     try {
-      const secretKey = 'TUbW5C7D2Nr7fXIPyZiVjjU1'; // Replace 'YOUR_SECRET_KEY' with your actual secret key
+      const secretKey = 'CHASECK_TEST-Ehg0EssyVj9DdphYtZuUeUce6SzyUhdi'; // Replace 'YOUR_SECRET_KEY' with your actual secret key
       const paymentDetails = {
-
         amount: '200', // Example amount
         currency: 'ETB', // Example currency
         email: 'john@gmail.com', // Example email
-        first_name: 'John', // Example first name
-        last_name: 'Doe', // Example last name
+        first_name: userId, // Example first name
+        last_name: userId, // Example last name
         tx_ref: txRef,
         callback_url: 'https://example.com/callback', // Example callback URL
         return_url: 'https://example.com/return', // Example return URL
         customization: {
-          title: 'Test Title', // Example title
+          title: courseId, // Example title
           description: 'Test Description', // Example description
         },
       };
-      const response = await axios.post('https://api.chapa.co/v1/transaction/initialize', paymentDetails, {
+      const response = await fetch('https://api.chapa.co/v1/transaction/initialize', {
+        method: 'POST',
         headers: {
-          Authorization: `Bearer ${secretKey}`, // Include secret key as bearer token
-          'Content-Type': 'application/json', // Specify content type as JSON
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${secretKey}`, // Include secret key as bearer token
         },
+        body: JSON.stringify(paymentDetails),
       });
+      const responseData = await response.json();
       if (response.status === 200) {
-        return response.data.data;
+        return responseData.data;
       } else {
         throw new Error('Failed to initialize transaction.');
       }
@@ -68,13 +69,14 @@ export class PaymentService {
   async verifyTransaction(txRef: string): Promise<any> {
     try {
       const secretKey = 'YOUR_SECRET_KEY'; // Replace 'YOUR_SECRET_KEY' with your actual secret key
-      const response = await axios.get(`https://api.chapa.co/v1/transaction/verify/${txRef}`, {
+      const response = await fetch(`https://api.chapa.co/v1/transaction/verify/${txRef}`, {
         headers: {
-          Authorization: `Bearer ${secretKey}`, // Include secret key as bearer token
+          'Authorization': `Bearer ${secretKey}`, // Include secret key as bearer token
         },
       });
+      const responseData = await response.json();
       if (response.status === 200) {
-        return response.data;
+        return responseData;
       } else {
         throw new Error('Failed to verify transaction.');
       }
@@ -99,8 +101,4 @@ export class PaymentService {
   generateTransactionReference(): string {
     return 'TX-' + Math.random().toString(36).substr(2, 9);
   }
-
-
-
-  
 }

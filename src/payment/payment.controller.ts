@@ -77,7 +77,7 @@ export class PaymentController {
     const options = {
       method: 'GET',
       headers: {
-        'Authorization': 'Bearer CHASECK_TEST-sFmHENKuOyJTAqjEYS0Cjqpz2UlHEKTy'
+        'Authorization': 'Bearer CHASECK_TEST-03GLYZuJTIrsX63PY7HpMn4J6IWqVNeY'
       }
     };
   

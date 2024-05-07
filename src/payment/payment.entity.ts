@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // paidCourse.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
@@ -14,4 +15,8 @@ export class PaidCourse {
 
   @Column()
   tx_ref: string;
+
+  @Column()
+  paid : boolean;
+
 }

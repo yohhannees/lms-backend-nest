@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Post, Body, HttpException, HttpStatus, UseGuards, Req } from '@nestjs/common';
+import { Controller, Post, Body, HttpException, HttpStatus } from '@nestjs/common';
 import { UserService } from './user.service';
-import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
@@ -49,17 +48,18 @@ export class AuthController {
     }
   }
 
+
   @Post('login')
   async login(@Body() body: { email: string; password: string }) {
     const { email, password } = body;
     const user = await this.userService.validateUser(email, password);
     if (user) {
-      const response = {
+      const token = await this.userService.generateToken(user);
+      return {
         success: true,
         message: 'Login successful',
-        data: user,
+        data: { user, token },
       };
-      return response;
     } else {
       const response = {
         success: false,
@@ -69,7 +69,6 @@ export class AuthController {
       throw new HttpException(response, HttpStatus.BAD_REQUEST);
     }
   }
-
   @Post('forgot-password')
   async forgotPassword(@Body() body: { email: string }) {
     const { email } = body;
@@ -131,23 +130,6 @@ export class AuthController {
   }
 
 
-
-   @Post('purchase/:courseId')
-  @UseGuards(AuthGuard('jwt'))
-  async purchaseCourse(@Req() req, @Body() body: { courseId: number }) {
-    const userId = req.user.id;
-    const courseId = body.courseId;
-    try {
-      await this.userService.purchaseCourse(userId, courseId);
-      return {
-        success: true,
-        message: 'Course purchased successfully.',
-        data: null,
-      };
-    } catch (error) {
-      throw new HttpException(error.message || 'Failed to purchase course.', HttpStatus.BAD_REQUEST);
-    }
-  }
 
 
   

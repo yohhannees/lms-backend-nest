@@ -5,16 +5,19 @@ import { Repository } from 'typeorm';
 import { User } from './user.entity';
 // import { randomBytes } from 'crypto';
 import { EmailService } from './email.service';
-import { Course } from 'src/schema/course/course.entity';
+import { JwtService } from '@nestjs/jwt';
 
+interface JwtPayload {
+  email: string;
+  id: number;
+}
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     private emailService: EmailService,
-    @InjectRepository(Course)
-    private coursesRepository: Repository<Course>,
+    private readonly jwtService: JwtService,
   ) {}
 
   async createUser(
@@ -102,32 +105,25 @@ export class UserService {
     throw new BadRequestException('Invalid verification code.');
   }
 
-  async purchaseCourse(userId: number, course_id: number): Promise<void> {
-    const user = await this.usersRepository.findOne({
-      where: { id: userId },
-      relations: ['courses'],
-    });
-    if (!user) {
-      throw new Error('User not found');
-    }
-    const course = await this.coursesRepository.findOne({
-      where: { course_id },
-    });
-    if (!course) {
-      throw new Error('Course not found');
-    }
-    user.courses.push(course);
-    await this.usersRepository.save(user);
+
+
+  async generateToken(user: User): Promise<string> {
+    const payload: JwtPayload = { email: user.email, id: user.id };
+    return this.jwtService.sign(payload);
   }
 
-  async hasCourseAccess(userId: number, course_id: number): Promise<boolean> {
-    const user = await this.usersRepository.findOne({
-      where: { id: userId },
-      relations: ['courses'],
-    });
+async validateToken(token: string): Promise<User> {
+  try {
+    const payload: JwtPayload = this.jwtService.verify(token);
+    // Fetch user from the database using payload data
+    const user = await this.usersRepository.findOne({ where: { email: payload.email, id: payload.id } });
     if (!user) {
-      throw new Error('User not found');
+      throw new Error('User not found.');
     }
-    return user.courses.some((course) => course.course_id === course_id);
+    return user;
+  } catch (error) {
+    return null;
   }
+}
+
 }

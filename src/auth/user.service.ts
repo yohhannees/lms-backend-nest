@@ -109,7 +109,7 @@ export class UserService {
 
   async generateToken(user: User): Promise<string> {
     const payload: JwtPayload = { email: user.email, id: user.id };
-    return this.jwtService.sign(payload);
+    return this.jwtService.sign(payload, { secret: '1234567' });
   }
 
 async validateToken(token: string): Promise<User> {

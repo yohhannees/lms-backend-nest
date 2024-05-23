@@ -11,10 +11,11 @@ export class userGuard implements CanActivate {
         context: ExecutionContext,
     ): boolean | Promise<boolean> | Observable<boolean> {
         const request = context.switchToHttp().getRequest();
-        const token = request.headers['authorization'];
-        if (!token) {
+        const authHeader = request.headers['authorization'];
+        if (!authHeader) {
             return false;
         }
+        const token = authHeader.split(' ')[1];
         return this.userService.validateToken(token).then(result => Boolean(result));
     }
 }

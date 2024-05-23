@@ -1,11 +1,12 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Delete, Param, UseInterceptors, UploadedFile, Body } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Param, UseInterceptors, UploadedFile, Body, UseGuards } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import * as path from 'path';
 import { MulterFile } from 'multer';
 import { UnitService } from './unit.service';
 import { Unit } from './unit.entity';
+import { userGuard } from 'src/auth/userGuard';
 // import { userGuard } from './../../auth/userGuard';
 
 @Controller('unit')
@@ -13,7 +14,7 @@ export class UnitController {
   constructor(private readonly unitService: UnitService) {}
 
 
-  // @UseGuards(userGuard) 
+  @UseGuards(userGuard) 
   @Get()
   async findAll(): Promise<any> {
     try {

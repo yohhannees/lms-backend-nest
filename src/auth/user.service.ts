@@ -105,25 +105,26 @@ export class UserService {
     throw new BadRequestException('Invalid verification code.');
   }
 
-
-
   async generateToken(user: User): Promise<string> {
     const payload: JwtPayload = { email: user.email, id: user.id };
     return this.jwtService.sign(payload, { secret: '1234567' });
   }
 
-async validateToken(token: string): Promise<User> {
-  try {
-    const payload: JwtPayload = this.jwtService.verify(token);
-    // Fetch user from the database using payload data
-    const user = await this.usersRepository.findOne({ where: { email: payload.email, id: payload.id } });
-    if (!user) {
-      throw new Error('User not found.');
+  async validateToken(token: string): Promise<User> {
+    try {
+      const payload: JwtPayload = this.jwtService.verify(token,{ secret: '1234567' });
+      // Fetch user from the database using payload data
+      console.log(payload);
+      const user = await this.usersRepository.findOne({
+        where: { email: payload.email, id: payload.id },
+      });
+      console.log(user);
+      if (!user) {
+        throw new Error('User not found.');
+      }
+      return user;
+    } catch (error) {
+      return null;
     }
-    return user;
-  } catch (error) {
-    return null;
   }
-}
-
 }

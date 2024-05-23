@@ -5,14 +5,11 @@ import { User } from './user.entity';
 import { AuthController } from './auth.controller';
 import { EmailService } from './email.service';
 import { UserService } from './user.service';
-import { Course } from 'src/schema/course/course.entity';
-import { CourseController } from 'src/schema/course/course.controller';
-import { CourseService } from 'src/schema/course/course.service';
-import { ThumbnailModule } from 'src/schema/course/thumbnail/thumbnail.module';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Course]), ThumbnailModule],
-  controllers: [AuthController, CourseController],
-  providers: [UserService, EmailService, CourseService],
+  imports: [TypeOrmModule.forFeature([User])],
+  controllers: [AuthController],
+  providers: [UserService, EmailService, JwtModule, JwtService],
 })
 export class AuthModule {}

@@ -3,31 +3,36 @@ import { PaidCourse } from './payment.entity';
 import { Repository} from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Body, Post, Controller, Get, Param } from '@nestjs/common';
+import { UserService } from '../auth/user.service';
+import { CourseService } from '../schema/course/course.service';
 
 @Controller()
 export class PaymentController {
   constructor(
     @InjectRepository(PaidCourse)
     private readonly paidCourseRepository: Repository<PaidCourse>,
+    private userService: UserService,
+    private courseService: CourseService,
   ) {}
 
   @Post('buy')
   async initializePayment(@Body() paymentData: { userId: string, courseId: string }): Promise<any> {
     const { userId, courseId } = paymentData;
     const txRef = `chet-${userId}-${courseId}-${Math.random().toString(36).substr(2, 9)}`;
+    const user = await this.userService.findById(Number(userId));
+    const course = await this.courseService.findById(Number(courseId));
 
     const data = {
-      amount: "100",
+      amount: course.price,
       currency: "ETB",
-      email: "abebech_bekele@gmail.com",
-      first_name: userId.toString(),
-      last_name: "Gizachew",
+      email: user.email,
+      first_name: user.fullname,
       tx_ref: txRef,
       callback_url: "https://webhook.site/077164d6-29cb-40df-ba29-8a00e59a7e60",
       return_url: "https://www.google.com/",
       customization: {
-        title: courseId.toString(),
-        description: "I love online payments"
+        title: course.title,
+        description: course.about,
       }
     };
 
